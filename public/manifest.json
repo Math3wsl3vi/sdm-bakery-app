@@ -1,7 +1,7 @@
 {
-  "name": "ChakulaHub",
-  "short_name": "ChakulaHub",
-  "description": "Meal Booking Platform",
+  "name": "Sdm Bakery",
+  "short_name": "Sdm Bakery",
+  "description": "Flavour of Fellowship",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
