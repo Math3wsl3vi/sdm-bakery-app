@@ -195,7 +195,7 @@ const MenuSection = () => {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-    doc.text("ChakulaHub Receipt", 105, 20, { align: "center" });
+    doc.text("Sdm Bakery Receipt", 105, 20, { align: "center" });
 
     doc.setLineWidth(0.5);
     doc.line(20, 25, 190, 25);
@@ -229,7 +229,7 @@ const MenuSection = () => {
 
     doc.setFont("helvetica", "italic");
     doc.setFontSize(12);
-    doc.text("Thank you for choosing ChakulaHub!", 105, 150, { align: "center" });
+    doc.text("Thank you for choosing Sdm Bakery!", 105, 150, { align: "center" });
 
     const pdfBlob = new Blob([doc.output("blob")], { type: "application/pdf" });
 
@@ -296,7 +296,7 @@ const MenuSection = () => {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-    doc.text("ChakulaHub Receipt", 105, 20, { align: "center" });
+    doc.text("Sdm Bakery Receipt", 105, 20, { align: "center" });
 
     doc.setLineWidth(0.5);
     doc.line(20, 25, 190, 25);
@@ -336,7 +336,7 @@ const MenuSection = () => {
 
     doc.setFont("helvetica", "italic");
     doc.setFontSize(12);
-    doc.text("Thank you for choosing ChakulaHub!", 105, 170, {
+    doc.text("Thank you for choosing Sdm Bakery!", 105, 170, {
       align: "center",
     });
 

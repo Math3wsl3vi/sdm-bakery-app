@@ -29,13 +29,13 @@ const Footer = () => {
         {/* <div>
           <h1 className="text-xl font-semibold">Follow Us</h1>
           <div className="flex gap-4 mt-3">
-            <Link href="https://x.com/chakulaHubKenya" target="_blank" className="hover:opacity-75">
+            <Link href="https://x.com/Sdm BakeryKenya" target="_blank" className="hover:opacity-75">
               <Image src="/images/twitter.png" alt="Twitter" width={20} height={20} />
             </Link>
             <Link href="https://web.facebook.com/profile.php?id=61573381958394" target="_blank" className="hover:opacity-75">
               <Image src="/images/facebook.png" alt="Facebook" width={20} height={20} />
             </Link>
-            <Link href="https://www.instagram.com/chakulahubkenya/" target="_blank" className="hover:opacity-75">
+            <Link href="https://www.instagram.com/Sdm Bakerykenya/" target="_blank" className="hover:opacity-75">
               <Image src="/images/insta.png" alt="Instagram" width={20} height={20} />
             </Link>
           </div>
