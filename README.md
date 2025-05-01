@@ -1,30 +1,29 @@
+# 🥖 SDM Bakery
 
-# 🍽️ ChakulaHub
-
-**ChakulaHub** is a smart meal booking and management platform designed to streamline the process of reserving, organizing, and managing meals in institutions such as universities, hospitals, and organizations.
+**SDM Bakery** is a student-led, Christian Union initiative that provides freshly baked foodstuffs and snacks. Our mission is to serve the campus and surrounding communities with excellence, love, and quality products through smart ordering, management, and delivery.
 
 ## 🚀 Features
 
-- 🧑‍🍳 Admin panel for managing food items and meal schedules  
-- 📆 Users can view daily meals and book them in advance  
-- 💵 **M-Pesa STK Push integration** for seamless payments  
+- 🧁 Admin panel to manage baked items, pricing, and orders  
+- 📦 Customers can browse and place orders for delivery or pickup  
+- 💵 **M-Pesa STK Push integration** for fast, secure payments  
 - 🧠 Global state management using **Zustand**  
-- 📱 **PWA support** for offline functionality and mobile responsiveness  
-- 🔒 Secure authentication and role-based access  
-- 🔔 Real-time notifications and meal reminders  
-- 📊 Meal booking and payment analytics  
+- 📱 **PWA support** for offline usage and mobile convenience  
+- 🔒 Authentication with role-based access (admin & customer)  
+- 🔔 Real-time order status updates and delivery tracking  
+- 📊 Order history and sales analytics for admin users  
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React / Next.js + Tailwind CSS + Shadcn ui components 
+- **Frontend**: React / Next.js + Tailwind CSS + Shadcn UI  
 - **State Management**: Zustand  
 - **Backend**: Firebase (Firestore + Realtime Database)  
 - **Authentication**: Firebase Auth  
-- **Payments**: M-Pesa STK Push (via Node.js + Next Api Routes)  
-- **Hosting**: Vercel / Firebase Hosting  
+- **Payments**: M-Pesa STK Push (via Node.js Express + Next API routes)  
+- **Hosting**: Firebase Hosting / Vercel  
 - **Database**: 
-  - Firestore: meal, user, and admin data  
-- **PWA**: Service worker & manifest.json integration for installable web app
+  - Firestore: product, order, and user data  
+  - Realtime DB: live order status  
 
 
 ## 🛠️ Installation
@@ -32,11 +31,11 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/math3wsl3v/chakula-hub-project-1.git
+   git clone https://github.com/math3wsl3v/sdm-bakery-app.git
 2. Navigate to the project directory:
 
    ```bash
-   cd chakula-hub-project-1
+   cd sdm-bakery-app
    
 3. Install dependencies:
 
