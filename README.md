@@ -31,11 +31,11 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/math3wsl3v/chakula-hub-project-1.git
+   git clone https://github.com/math3wsl3v/sdm-bakery-app.git
 2. Navigate to the project directory:
 
    ```bash
-   cd chakula-hub-project-1
+   cd sdm-bakery-app
    
 3. Install dependencies:
 
