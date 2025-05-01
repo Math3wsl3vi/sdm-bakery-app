@@ -93,7 +93,7 @@ const Navbar = () => {
     <>
       <div className="w-full flex flex-row items-center justify-between px-5 py-4 border-b-2 shadow-sm font-pop">
         <Link href={"/"} className="cursor-pointer">
-          <Image src="/images/logo.png" alt="logo" width={40} height={40} />
+          <h1>LOGO</h1>
         </Link>
         <h1 className="text-xl uppercase font-semibold font-pop">Sdm Bakery</h1>
 

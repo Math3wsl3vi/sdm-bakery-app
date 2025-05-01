@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 
 type Meal = {
   id: string;
@@ -101,9 +100,7 @@ const AdminMeals = () => {
       <table className="w-full mt-4 border min-w-max">
         <thead>
           <tr>
-            <th className="border px-4 py-2">Image</th>
             <th className="border px-4 py-2">Meal</th>
-            <th className="border px-4 py-2">Category</th>
             <th className="border px-4 py-2">Quantity</th>
             <th className="border px-4 py-2">Price</th>
             <th className="border px-4 py-2">Actions</th>
@@ -112,22 +109,7 @@ const AdminMeals = () => {
         <tbody>
           {meals.map((meal) => (
             <tr key={meal.id}>
-              <td className="border px-4 py-2">
-                {meal.imageUrl ? (
-                  <Image
-                    src={meal.imageUrl}
-                    alt={meal.name}
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 object-cover"
-                  />
-                ) : (
-                  <span>No Image</span>
-                )}
-              </td>
-
               <td className="border px-4 py-2">{meal.name}</td>
-              <td className="border px-4 py-2">{meal.category}</td>
               <td className="border px-4 py-2">{meal.quantity}</td>
               <td className="border px-4 py-2">Ksh {meal.price}</td>
               <td className="border px-4 py-2 flex gap-2">
@@ -177,7 +159,7 @@ const AdminMeals = () => {
                 Cancel
               </Button>
               <Button
-                className="bg-orange-500 text-white"
+                className="bg-orange-1 text-white"
                 onClick={updateQuantity}
                 disabled={loading}
               >

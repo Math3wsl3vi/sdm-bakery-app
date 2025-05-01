@@ -45,7 +45,7 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="text-center text-sm text-gray-600 mt-6 border-t pt-4">
-        &copy; {new Date().getFullYear()} Powered by Mantle Kenya ©. All rights reserved.
+        &copy; {new Date().getFullYear()} Powered by Mantle Kenya. All rights reserved.
       </div>
     </footer>
   );

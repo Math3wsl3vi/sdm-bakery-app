@@ -81,7 +81,7 @@ const Reviews = () => {
   useEffect(() => {
     if (meals.length === 0) return; // Ensure meals are loaded before fetching reviews
   
-    const reviewsRef = collection(db, "reviews");
+    const reviewsRef = collection(db, "Sdmreviews");
   
     // Set up real-time listener
     const unsubscribe = onSnapshot (reviewsRef, (snapshot) => {
@@ -107,7 +107,7 @@ const Reviews = () => {
       return;
     }
     try {
-      await addDoc(collection(db, "reviews"), {
+      await addDoc(collection(db, "Sdmreviews"), {
         userId: user.uid,
         userEmail: user.email,
         mealId: selectedMeal.id,
@@ -141,7 +141,7 @@ const Reviews = () => {
     }
   
     try {
-      await updateDoc(doc(db, "reviews", reviewId), {
+      await updateDoc(doc(db, "Sdmreviews", reviewId), {
         adminResponse: adminResponses[reviewId],
       });
   
