@@ -5,34 +5,39 @@ import React from "react";
 const FAQs = () => {
   const faqData = [
     {
-      question: "How do I place an order?",
+      question: "What is SDM Bakery?",
       answer:
-        "To place an order, browse the menu, select your meal, and proceed to checkout. Payments are completed via M-Pesa or other digital payment options.",
+        "SDM Bakery is a Christian student-led bakery founded by members of the Student Discipleship Ministry at Kabarak University. We are committed to providing delicious, affordable, and wholesome baked goods made with love and integrity.",
     },
     {
-      question: "Can I cancel my order?",
+      question: "How can I place an order?",
       answer:
-        "Once an order is confirmed, cancellations may not be possible. However, if an issue arises, contact support immediately.",
+        "You can place an order through our website or by visiting our physical shop in Rafiki. Just choose your favorite treats, specify the quantity, and follow the checkout process. We accept M-Pesa and other digital payments.",
     },
     {
-      question: "What if my payment fails?",
+      question: "Do you take bulk or custom orders?",
       answer:
-        "If your payment fails, check your M-Pesa balance or payment details and try again. If the issue persists, contact support.",
+        "Yes, we do! Whether it's for birthdays, game nights, CU events, or student group meetings, you can place custom or bulk orders. Kindly contact us at least 2 days in advance.",
     },
     {
-      question: "How do I contact customer support?",
+      question: "Where are you located?",
       answer:
-        "You can reach us at support@chakulahub.com or call our support line for urgent assistance.",
+        "We are based in Rafiki area. Look out for our shop banner writtes sdm Bakery and come get the best mandazis in Rafiki.",
+    },
+    {
+      question: "How do I contact SDM Bakery?",
+      answer:
+        "You can reach us at sdmbakery@info.com or send a message via our Instagram page @sdmbakery. For urgent queries, call +254 700 000 000.",
     },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-orange-1 mb-4">Frequently Asked Questions</h1>
+    <div className="max-w-4xl mx-auto p-6 font-poppins">
+      <h1 className="text-3xl font-bold text-orange-1 mb-6 text-center">Frequently Asked Questions</h1>
       {faqData.map((faq, index) => (
         <div key={index} className="mb-6 border-b pb-4">
-          <h2 className="text-xl font-semibold">{faq.question}</h2>
-          <p className="text-gray-700">{faq.answer}</p>
+          <h2 className="text-xl font-semibold text-gray-800">{faq.question}</h2>
+          <p className="text-gray-700 mt-2">{faq.answer}</p>
         </div>
       ))}
     </div>

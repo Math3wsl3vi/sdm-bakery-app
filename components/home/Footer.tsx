@@ -1,6 +1,4 @@
 "use client";
-
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -11,10 +9,10 @@ const Footer = () => {
         
         {/* Brand Section */}
         <div>
-          <h1 className="font-bold text-xl text-orange-1">CHAKULAHUB</h1>
+          <h1 className="font-bold text-xl text-orange-1">SDM Bakery</h1>
           <p className="text-sm">Contact us</p>
-          <p className="text-sm">Email: <Link href="mailto:chakulahub@gmail.com" className="text-blue-500">chakulahub@gmail.com</Link></p>
-          <p className="text-sm">Call: <a href="tel:+254798 050462" className="text-orange-1 font-semibold">0798 050462</a></p>
+          <p className="text-sm">Email: <Link href="" className="text-blue-500">sdmbakery@info.com</Link></p>
+          <p className="text-sm">Call: <a href="" className="text-orange-1 font-semibold">0712345678</a></p>
         </div>
 
         {/* Navigation Links */}
@@ -28,7 +26,7 @@ const Footer = () => {
         </div>
 
         {/* Social Media Icons */}
-        <div>
+        {/* <div>
           <h1 className="text-xl font-semibold">Follow Us</h1>
           <div className="flex gap-4 mt-3">
             <Link href="https://x.com/chakulaHubKenya" target="_blank" className="hover:opacity-75">
@@ -41,13 +39,13 @@ const Footer = () => {
               <Image src="/images/insta.png" alt="Instagram" width={20} height={20} />
             </Link>
           </div>
-        </div>
+        </div> */}
 
       </div>
 
       {/* Copyright */}
       <div className="text-center text-sm text-gray-600 mt-6 border-t pt-4">
-        &copy; {new Date().getFullYear()} ChakulaHub. All rights reserved.
+        &copy; {new Date().getFullYear()} Powered by Mantle Kenya ©. All rights reserved.
       </div>
     </footer>
   );

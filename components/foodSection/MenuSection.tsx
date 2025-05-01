@@ -18,7 +18,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
-import Loader from "../Loader";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import { useCartStore } from "@/lib/store/cartStore";
@@ -30,7 +29,6 @@ import { Input } from "../ui/input";
 type Meal = {
   id: string;
   name: string;
-  category: "Breakfast" | "Lunch" | "Supper";
   price: number;
   quantity: number;
   imageUrl: string;
@@ -39,19 +37,16 @@ type Meal = {
 const MenuSection = () => {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<Meal | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<
-    "Breakfast" | "Lunch" | "Supper"
-  >("Breakfast");
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false); // Track payment success
+  const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
   const { addToCart, cart } = useCartStore();
   const [polling, setPolling] = useState(false);
-  const storage = getStorage()
+  const storage = getStorage();
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -85,13 +80,13 @@ const MenuSection = () => {
     setSelectedMeal(meal);
     setQuantity(1);
     setIsCheckoutOpen(true);
-    setIsPaymentSuccessful(false); 
+    setIsPaymentSuccessful(false);
   };
 
   const startPolling = (checkoutRequestID: string, mealId: string) => {
     if (polling) return;
     setPolling(true);
-  
+
     const interval = setInterval(async () => {
       try {
         const response = await fetch("/api/mpesa/status", {
@@ -99,23 +94,22 @@ const MenuSection = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ checkoutRequestID }),
         });
-  
+
         const data = await response.json();
-  
+
         if (data.status === "COMPLETED") {
           clearInterval(interval);
           setPolling(false);
           setIsPaymentSuccessful(true);
-  
+
           try {
             if (!selectedMeal) {
               toast({ description: "No meal selected. Please try again." });
               return;
             }
-  
+
             const orderID = `ORD-${Date.now()}`;
-  
-            // ✅ Save Order Data in Firestore
+
             const orderRef = await addDoc(collection(db, "orders"), {
               userEmail: user?.email || "Unknown User",
               userId: user?.uid || "N/A",
@@ -133,8 +127,7 @@ const MenuSection = () => {
                 },
               ],
             });
-  
-            // ✅ Generate and Upload PDF Receipt
+
             const receiptUrl = await generateAndUploadReceipt({
               orderId: orderID,
               userEmail: user?.email || "Unknown User",
@@ -143,22 +136,20 @@ const MenuSection = () => {
               quantity,
               phoneNumber,
             });
-  
-            // ✅ Update Firestore Order with Receipt URL
+
             await updateDoc(orderRef, { receiptUrl });
-  
-            // ✅ Reduce meal quantity in Firestore using a transaction
+
             const mealRef = doc(db, "meals", mealId);
             await runTransaction(db, async (transaction) => {
               const mealDoc = await transaction.get(mealRef);
               if (!mealDoc.exists()) throw "Meal does not exist!";
-  
+
               const newQuantity = mealDoc.data().quantity - quantity;
               if (newQuantity < 0) throw "Not enough stock available!";
-  
+
               transaction.update(mealRef, { quantity: newQuantity });
             });
-  
+
             toast({
               description: "Payment confirmed! Order placed successfully.",
             });
@@ -180,7 +171,7 @@ const MenuSection = () => {
       }
     }, 5000);
   };
-  
+
   const generateAndUploadReceipt = async ({
     orderId,
     mealName,
@@ -197,66 +188,56 @@ const MenuSection = () => {
   }) => {
     const doc = new jsPDF();
     const date = new Date().toLocaleString();
-  
-    // Create Barcode
+
     const canvas = document.createElement("canvas");
     JsBarcode(canvas, orderId, { format: "CODE128" });
     const barcodeData = canvas.toDataURL("image/png");
-  
-    // Title
+
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.text("ChakulaHub Receipt", 105, 20, { align: "center" });
-  
-    // Line separator
+
     doc.setLineWidth(0.5);
     doc.line(20, 25, 190, 25);
-  
-    // Order Details
+
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
     doc.text(`Date:`, 22, 40);
     doc.setFont("helvetica", "normal");
     doc.text(`${date}`, 50, 40);
-  
+
     doc.setFont("helvetica", "bold");
     doc.text(`Order ID:`, 22, 50);
     doc.setFont("helvetica", "normal");
     doc.text(`${orderId}`, 50, 50);
-  
+
     doc.setFont("helvetica", "bold");
     doc.text(`Phone Number:`, 22, 60);
     doc.setFont("helvetica", "normal");
     doc.text(`${phoneNumber}`, 60, 60);
-  
-    // Meal Details
+
     doc.setFont("helvetica", "bold");
     doc.text("Meal Details:", 22, 80);
     doc.setFont("helvetica", "normal");
     doc.text(`${mealName} x${quantity} - Ksh ${price}`, 22, 90);
-  
-    // Highlight Total Price
+
     doc.setFont("helvetica", "bold");
     doc.text(`Total Price: Ksh ${price}`, 22, 100);
     doc.line(20, 105, 190, 105);
-  
-    // Barcode
+
     doc.addImage(barcodeData, "PNG", 55, 110, 100, 30);
-  
-    // Footer
+
     doc.setFont("helvetica", "italic");
     doc.setFontSize(12);
     doc.text("Thank you for choosing ChakulaHub!", 105, 150, { align: "center" });
-  
-    // Convert PDF to Blob
+
     const pdfBlob = new Blob([doc.output("blob")], { type: "application/pdf" });
-  
-    // Upload PDF to Firebase Storage
+
     const storageRef = ref(storage, `receipts/${orderId}.pdf`);
     await uploadBytes(storageRef, pdfBlob);
     return await getDownloadURL(storageRef);
   };
-  
+
   const handlePayment = async () => {
     if (!phoneNumber) {
       toast({ description: "Please enter your phone number." });
@@ -291,7 +272,7 @@ const MenuSection = () => {
         toast({
           description: "Payment initiated. Waiting for confirmation...",
         });
-        setPolling(true); // Start polling for confirmation
+        setPolling(true);
         startPolling(data.CheckoutRequestID, selectedMeal?.id ?? "");
       } else {
         toast({ description: "Failed to initiate payment." });
@@ -308,25 +289,21 @@ const MenuSection = () => {
 
     const doc = new jsPDF();
     const date = new Date().toLocaleString();
-    const orderID = `ORD-${Date.now()}`; // Unique Order ID
+    const orderID = `ORD-${Date.now()}`;
 
-    // Generate barcode as Base64 image
     const canvas = document.createElement("canvas");
     JsBarcode(canvas, orderID, { format: "CODE128" });
 
-    // Title
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
     doc.text("ChakulaHub Receipt", 105, 20, { align: "center" });
 
-    // Line separator
     doc.setLineWidth(0.5);
     doc.line(20, 25, 190, 25);
 
-    // Section: Order Details (Encased in a box)
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.rect(18, 30, 174, 40); // Draw box
+    doc.rect(18, 30, 174, 40);
 
     doc.text(`Date:`, 22, 40);
     doc.setFont("helvetica", "normal");
@@ -342,7 +319,6 @@ const MenuSection = () => {
     doc.setFont("helvetica", "normal");
     doc.text(`${phoneNumber}`, 60, 60);
 
-    // Section: Meal Details
     doc.setFont("helvetica", "bold");
     doc.text("Meal Details:", 22, 80);
     doc.setFont("helvetica", "normal");
@@ -350,29 +326,27 @@ const MenuSection = () => {
     doc.text(`Quantity: ${quantity}`, 22, 100);
     doc.text(`Price per meal: Ksh ${selectedMeal.price}`, 22, 110);
 
-    // Highlight Total Price
     doc.setFont("helvetica", "bold");
     doc.text(`Total Price: Ksh ${selectedMeal.price * quantity}`, 22, 120);
     doc.setLineWidth(0.3);
     doc.line(20, 125, 190, 125);
 
-    // Centered Barcode
     const barcodeData = canvas.toDataURL("image/png");
-    doc.addImage(barcodeData, "PNG", 55, 130, 100, 30); // Adjust position & size
+    doc.addImage(barcodeData, "PNG", 55, 130, 100, 30);
 
-    // Footer
     doc.setFont("helvetica", "italic");
     doc.setFontSize(12);
     doc.text("Thank you for choosing ChakulaHub!", 105, 170, {
       align: "center",
     });
 
-    // Save PDF
     doc.save(`Receipt_${selectedMeal.name}_${Date.now()}.pdf`);
   };
+
   const filteredMeals = meals.filter((meal) =>
     meal.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -398,19 +372,19 @@ const MenuSection = () => {
           {filteredMeals.map((meal) => (
             <div key={meal.id} className="border p-4 rounded-lg shadow-md mx-10 mb-3">
               <div className="flex justify-between items-center flex-row-reverse">
-              {meal.imageUrl && (
-                        <Image
-                          src={meal.imageUrl}
-                          alt={meal.name}
-                          width={50}
-                          height={50}
-                          className="w-40 h-30 object-cover rounded-lg"
-                        />
-                      )}
-                      <div>
-                      <h3 className="text-lg font-semibold font-pop">{meal.name}</h3>
-                      <p className="text-green-600 font-bold font-pop">Ksh {meal.price}</p>
-                      </div>
+                {meal.imageUrl && (
+                  <Image
+                    src={meal.imageUrl}
+                    alt={meal.name}
+                    width={50}
+                    height={50}
+                    className="w-40 h-30 object-cover rounded-lg"
+                  />
+                )}
+                <div>
+                  <h3 className="text-lg font-semibold font-pop">{meal.name}</h3>
+                  <p className="text-green-600 font-bold font-pop">Ksh {meal.price}</p>
+                </div>
               </div>
               
               <div className="flex gap-5">
@@ -432,91 +406,68 @@ const MenuSection = () => {
         </div>
       ) : searchQuery ? (
         <p>No meals found.</p>
-      ) : null}
-
-      <div className="grid grid-cols-3 px-10 mt-10 font-pop">
-        {["Breakfast", "Lunch", "Supper"].map((category) => (
-          <div
-            key={category}
-            className={`border p-2 text-center cursor-pointer ${
-              selectedCategory === category ? "bg-orange-1 text-white" : ""
-            }`}
-            onClick={() =>
-              setSelectedCategory(category as "Breakfast" | "Lunch" | "Supper")
-            }
-          >
-            {category}
-          </div>
-        ))}
-      </div>
-
-      {loading ? (
-        <div className="text-center mt-5 flex items-center justify-center">
-          <Loader /> Loading meals...
-        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-10 mt-6 mb-20">
-          {meals
-            .filter((meal) => meal.category === selectedCategory)
-            .map((meal) => {
-              const isInCart = cart.some((item) => item.id === meal.id);
-              return (
-                <div
-                  key={meal.id}
-                  className="border p-4 rounded-lg shadow relative"
-                >
-                  {/* ✅ Small Badge on the Meal Item */}
-                  {isInCart && (
-                    <span className="absolute top-2 right-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-full">
-                      {cart.find((item) => item.id === meal.id)?.quantity}{" "}
-                      {cart.find((item) => item.id === meal.id)?.quantity === 1
-                        ? "item"
-                        : "items"}{" "}
-                      in Cart
-                    </span>
-                  )}
+          {meals.map((meal) => {
+            const isInCart = cart.some((item) => item.id === meal.id);
+            return (
+              <div
+                key={meal.id}
+                className="border p-4 rounded-lg shadow relative"
+              >
+                {isInCart && (
+                  <span className="absolute top-2 right-2 bg-black text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {cart.find((item) => item.id === meal.id)?.quantity}{" "}
+                    {cart.find((item) => item.id === meal.id)?.quantity === 1
+                      ? "item"
+                      : "items"}{" "}
+                    in Cart
+                  </span>
+                )}
 
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h3 className="mt-2 font-semibold capitalize font-pop">
-                        {meal.name}
-                      </h3>
-                      <p className="mt-2 font-bold text-orange-1 font-pop">
-                        Ksh {meal.price}
-                      </p>
-                      <h3 className="mt-2 font-semibold font-pop">
-                        {meal.quantity} Left
-                      </h3>
-                    </div>
-                    <div>
-                      {meal.imageUrl && (
-                        <Image
-                          src={meal.imageUrl}
-                          alt={meal.name}
-                          width={50}
-                          height={50}
-                          className="w-40 h-30 object-cover rounded-lg"
-                        />
-                      )}
-                    </div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="mt-2 font-semibold capitalize font-pop">
+                      {meal.name}
+                    </h3>
+                    <p className="mt-2 font-bold text-orange-1 font-pop">
+                      Ksh {meal.price}
+                    </p>
+                    <h3 className="mt-2 font-semibold font-pop">
+                      {meal.quantity} Left
+                    </h3>
                   </div>
-                  <div className="flex gap-5">
-                    <button
-                      className="mt-2 w-full bg-orange-2 text-white p-2 rounded font-pop"
-                      onClick={() => placeOrder(meal)}
-                    >
-                      Order Now
-                    </button>
-                    <button
-                      className="mt-2 w-full bg-orange-1 text-white p-2 rounded font-pop"
-                      onClick={() => addToCart(meal)}
-                    >
-                      Add To Cart
-                    </button>
+                  <div>
+                    {meal.imageUrl && (
+                      <Image
+                        src={meal.imageUrl}
+                        alt={meal.name}
+                        width={50}
+                        height={50}
+                        className="w-40 h-30 object-cover rounded-lg"
+                      />
+                    )}
                   </div>
                 </div>
-              );
-            })}
+                <div className="flex gap-5">
+                  <button
+                    className="mt-2 w-full bg-orange-2 text-white p-2 rounded font-pop"
+                    onClick={() => placeOrder(meal)}
+                    disabled={loading}
+                  >
+                    Order Now
+                  </button>
+                  <button
+                    className="mt-2 w-full bg-orange-1 text-white p-2 rounded font-pop"
+                    onClick={() => addToCart(meal)}
+                    disabled={loading}
+                  >
+                    Add To Cart
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -529,7 +480,6 @@ const MenuSection = () => {
           {selectedMeal && (
             <div className="mt-4">
               {isPaymentSuccessful ? (
-                // Payment Successful View
                 <>
                   <p>
                     <strong>Meal:</strong> {selectedMeal.name}
@@ -552,7 +502,6 @@ const MenuSection = () => {
                   </button>
                 </>
               ) : (
-                // Checkout View
                 <>
                   <p>
                     <strong>Meal:</strong> {selectedMeal.name}
