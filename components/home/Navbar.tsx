@@ -95,8 +95,9 @@ const Navbar = () => {
         <Link href={"/"} className="cursor-pointer">
           <h1>LOGO</h1>
         </Link>
+        <Link href={"/"} className="cursor-pointer">
         <h1 className="text-xl uppercase font-semibold font-pop">Sdm Bakery</h1>
-
+        </Link>
         <div className="flex gap-5 items-center">
           <Link href={"/cart"} className="relative">
             <Image src="/images/cart.png" alt="cart" width={25} height={25} />
@@ -120,7 +121,7 @@ const Navbar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 w-full h-full bg-white shadow-lg transform z-50 font-pop ${
+        className={`fixed top-0 right-0 w-full md:w-1/3 h-full bg-white shadow-lg transform z-50 font-pop ${
           sidebarOpen ? "translate-x-0" : "translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >
