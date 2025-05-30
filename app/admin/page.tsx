@@ -70,7 +70,7 @@ const AdminDashboard = () => {
       
       <div className="grid grid-cols-2 gap-4 mt-5">
         <Link href="/admin/meals">
-          <div className="border p-4 text-center cursor-pointer">Manage Meals</div>
+          <div className="border p-4 text-center cursor-pointer">Manage The Meals</div>
         </Link>
         <Link href="/admin/orders">
           <div className="border p-4 text-center cursor-pointer">{"Today's"} Orders</div>

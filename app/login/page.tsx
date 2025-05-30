@@ -107,7 +107,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
-      <Card className="w-[350px]">
+      <Card className="w-[350px]">  
         <CardHeader className="flex items-center flex-col">
           <CardTitle>Welcome to Sdm Bakery</CardTitle>
           <CardDescription>{isLogin ? "Login To Your Account" : "Create an Account"}</CardDescription>
